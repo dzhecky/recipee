@@ -118,7 +118,7 @@
 		{
 			"name": "users",
 			"request": {
-				"method": "PUT",
+				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "urlencoded",
@@ -131,13 +131,141 @@
 					]
 				},
 				"url": {
-					"raw": "{{base_url}}/users/5",
+					"raw": "{{base_url}}/users/2",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"users",
-						"5"
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/recipe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/recipe/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "sayur",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/recipe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "downey",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/recipe/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "kwetiau",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "popopopopopopopop",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/recipe/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe",
+						"1"
 					]
 				}
 			},
