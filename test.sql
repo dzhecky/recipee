@@ -17,4 +17,6 @@ UPDATE users SET alamat='bogor' WHERE name='ansor';
 
 DELETE FROM users WHERE name='ahmad';
 
+DELETE FROM users
+
 SELECT * FROM users;

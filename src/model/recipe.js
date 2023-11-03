@@ -1,9 +1,9 @@
 const Pool = require('../config/db')
 
 const getAllRecipes = async () => {
-    console.log('sukses test getallrecipes');
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT * FROM recipes;`, (err, result)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
+        JOIN users ON recipes.food_writer = users.id;`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -14,9 +14,9 @@ const getAllRecipes = async () => {
 }
 
 const getRecipeById = async (id) => {
-    console.log('sukses test getallrecipes');
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT * FROM recipes WHERE id='${id}';`, (err, result)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
+        JOIN users ON recipes.food_writer = users.id WHERE recipes.id='${id}';`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -27,7 +27,6 @@ const getRecipeById = async (id) => {
 }
 
 const deleteRecipe = async (id) => {
-    console.log('sukses test getallrecipes');
     return new Promise((resolve, reject)=>{
         Pool.query(`DELETE FROM recipes WHERE id='${id}';`, (err, result)=>{
             if(!err){
@@ -40,11 +39,10 @@ const deleteRecipe = async (id) => {
 }
 
 const inputRecipe = async (data) =>{
-    console.log('succes input recipe');
-    let {title, content} = data
+    let {id, title, ingredients, photo, category_id, food_writer} = data
 
     return new Promise((resolve, reject)=>{
-        Pool.query(`INSERT INTO recipes (title, content) VALUES ('${title}', '${content}')`, (err, result)=>{
+        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id, food_writer) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id}, ${food_writer})`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -55,11 +53,10 @@ const inputRecipe = async (data) =>{
 }
 
 const putRecipe = async (data) =>{
-    console.log('succes input recipe');
-    let {id, title, content} = data
+    let {id, title, ingredients, photo, category_id} = data
 
     return new Promise((resolve, reject)=>{
-        Pool.query(`UPDATE recipes SET title='${title}', content='${content}' WHERE id='${id}'`, (err, result)=>{
+        Pool.query(`UPDATE recipes SET title='${title}', ingredients='${ingredients}', photo='${photo}', category_id= ${category_id} WHERE id= ${id}`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
