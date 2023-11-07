@@ -3,7 +3,35 @@ const Pool = require('../config/db')
 const getAllRecipes = async () => {
     return new Promise((resolve, reject)=>{
         Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
-        JOIN users ON recipes.food_writer = users.id;`, (err, result)=>{
+        JOIN users ON recipes.food_writer = users.id ORDER BY category_id DESC;`, (err, result)=>{
+            if(!err){
+                return resolve(result)
+            }else {
+                reject(err)
+            }
+        })
+    })
+}
+const getRecipesSpec = async (data) => {
+    let {search, searchBy, offset, limit, asc} = data
+    return new Promise((resolve, reject)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
+        JOIN users ON recipes.food_writer = users.id WHERE recipes.${searchBy} ILIKE '%${search}%'
+        ORDER BY ID ${asc} OFFSET ${offset} LIMIT ${limit};`, (err, result)=>{
+            if(!err){
+                return resolve(result)
+            }else {
+                reject(err)
+            }
+        })
+    })
+}
+
+const getRecipesCount = async (data) => {
+    let {search, searchBy} = data
+    return new Promise((resolve, reject)=>{
+        Pool.query(`SELECT COUNT(*) FROM recipes JOIN category ON recipes.category_id=category.id
+        JOIN users ON recipes.food_writer = users.id WHERE recipes.${searchBy} ILIKE '%${search}%';`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -66,4 +94,4 @@ const putRecipe = async (data) =>{
     })
 }
 
-module.exports = {getAllRecipes, inputRecipe, putRecipe, getRecipeById, deleteRecipe}
+module.exports = {getAllRecipes, getRecipesSpec, getRecipesCount, inputRecipe, putRecipe, getRecipeById, deleteRecipe}

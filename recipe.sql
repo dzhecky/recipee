@@ -6,7 +6,14 @@ CREATE TABLE recipes(
 
 INSERT INTO recipes (title, ingredients, photo, category_id) VALUES ('gelato', 'Vanili, susu, air', 'https://picsum.photos/200', 2);
 
-SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id;
+SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM 
+recipes JOIN category ON recipes.category_id=category.id WHERE recipes.title ILIKE '%ayam%' ORDER BY category_id DESC;
+SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM 
+recipes JOIN category ON recipes.category_id=category.id WHERE recipes.ingredients ILIKE '%pangsit%' ORDER BY category_id DESC;
+SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM 
+recipes JOIN category ON recipes.category_id=category.id ORDER BY recipes.id DESC OFFSET 0 LIMIT 2;
+SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM 
+recipes JOIN category ON recipes.category_id=category.id WHERE category_id=1;
 
 ALTER TABLE recipes ADD CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES category(id);
 ALTER TABLE recipes ADD CONSTRAINT fk_food_writer FOREIGN KEY (food_writer) REFERENCES users(id);

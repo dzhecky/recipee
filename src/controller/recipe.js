@@ -1,4 +1,4 @@
-const {getAllRecipes, inputRecipe, getRecipeById, putRecipe, deleteRecipe} = require('../model/recipe')
+const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount} = require('../model/recipe')
 const {getCategory} = require('../model/category')
 
 const recipeController =  {
@@ -17,10 +17,49 @@ const recipeController =  {
 
         res.status(200).json({message : 'succes get data from recipe', data})
     },
+    getRecipesDetail : async (req, res, next)=> {
+
+        let {search, searchBy, limit, sortBy} = req.query
+        searchBy = searchBy || 'title'
+
+        let limiter = limit || 5
+        let pages = req.query.pages || 1
+        let asc = sortBy || 'ASC'
+
+        let data = {
+            searchBy,
+            search : search || '',
+            offset : (pages - 1) * limiter,
+            limit : limit || 3,
+            asc
+        }
+
+        let recipes = await getRecipesSpec(data)
+        let {rows} = await getRecipesCount(data)
+        let count = parseInt(rows[0].count)
+        let pagination = {
+            totalPage : Math.ceil(count/limiter),
+            totalData : count,
+            pageNow : parseInt(pages)
+        }
+        let result = recipes.rows
+        if(!result){
+            return res.status(404).json({message: 'failed to get data from recipe'})
+        }
+
+        result.forEach((item, index)=>{
+            let ingredients = item.ingredients.split(',')
+            result[index].ingredients = ingredients
+
+        })
+
+        res.status(200).json({message : 'succes get data from recipe', data: result, pagination})
+    },
     getById : async (req, res, next)=> {
         let id = req.params.id
         let recipes = await getRecipeById(id)
         let data = recipes.rows[0]
+        data.ingredients = data.ingredients.split(',')
         if(!data){
             return res.status(404).json({message: 'failed to get data by id from recipe'})
         }
