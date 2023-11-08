@@ -66,8 +66,8 @@ const recipeController =  {
         res.status(200).json({message : 'succes get data by id from recipe', data})
     },
     inputRecipes : async (req, res, next)=> {
-        let {id, title, ingredients, photo, category_id, food_writer} = req.body
-        if(!id || !title || !ingredients || !photo || !category_id || !food_writer){
+        let {id, title, ingredients, photo, category_id} = req.body
+        if(!id || !title || !ingredients || !photo || !category_id){
             return res.status(404).json({message: 'failed input data, all is required'})
         }
 
@@ -83,7 +83,7 @@ const recipeController =  {
             return res.status(404).json({message: 'invalid there is no data'})
         }
 
-        let data = {id, title, ingredients, photo, category_id: parseInt(category_id), food_writer: parseInt(food_writer)}
+        let data = {id, title, ingredients, photo, category_id: parseInt(category_id)}
         let result = await inputRecipe(data)
         if(!result){
             return res.status(404).json({message: 'failed input data to recipe'})

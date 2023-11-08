@@ -1,23 +1,60 @@
-const {createUser, getAllUser, deleteUser, updateUser, getUserById} = require('../model/user')
+const {getAllUser, addUser, deleteUser, updateUser, getUserById, showUser} = require('../model/user')
+const { v4: uuidv4 } = require('uuid');
+const argon2 = require('argon2');
+const {generateToken} = require('../helper/token')
 
 
 const userController = {
-    inputUser : async (req, res, next) => {
-        let {id, name, email, password} = req.body
-        if(!id || !name || !email || !password){
-            return res.status(404).json({message: 'failed input data, all is required'})
+    register : async (req, res, next) =>{
+        let {email, password, username} = req.body
+        if(!email || !password || !username){
+            res.status(400).json({status:400, message: 'must be filled'})
         }
-        
-        let data = {id, name, email, password}
-        let result = await createUser(data)
-        if(!result){
-            return res.status(404).json({message: 'failed to input data at users'})
+        let user = await getAllUser(email)
+        if(user.rowCount==1){
+            return res.status(400).json({status:400, message: 'email already exist'})
         }
-        res.status(200).json({message : 'succes input data to users', data})
+
+        password = await argon2.hash(password)
+
+        let data = {
+            uuid : uuidv4(),
+            email,
+            password,
+            username
+        }
+        let result = await addUser(data)
+        console.log(result);
+        res.status(200).json({status: 200, message: 'register success'})
+    },
+    login : async (req, res, next)=>{
+        let {email, password} = req.body
+        if(!email || !password){
+            res.status(400).json({status:400, message:'please fill username and password'})
+        }
+
+        let {rows, rowCount} = await getAllUser(email)
+        let user = rows[0]
+        if(rowCount==0){
+            return res.status(400).json({status:400, message: 'email doesnt exist, please register!'})
+        }
+
+        let isVerify = await argon2.verify(user.password,password)
+        if(!isVerify){
+            return res.status(400).json({message: 'wrong password'})
+        }
+
+        delete user.password
+
+        let token = generateToken(user)
+        user.token = token
+
+        console.log(user);
+        res.status(200).json({status:200, message:'Login success', data: user})
     },
     getUsers : async (req, res, next)=> {
-        let recipes = await getAllUser()
-        let data = recipes.rows
+        let users = await showUser()
+        let data = users.rows
         if(!data){
             return res.status(404).json({message: 'failed to get data users'})
         }

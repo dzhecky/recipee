@@ -2,8 +2,8 @@ const Pool = require('../config/db')
 
 const getAllRecipes = async () => {
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
-        JOIN users ON recipes.food_writer = users.id ORDER BY category_id DESC;`, (err, result)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id
+         ORDER BY category_id DESC;`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -15,8 +15,8 @@ const getAllRecipes = async () => {
 const getRecipesSpec = async (data) => {
     let {search, searchBy, offset, limit, asc} = data
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
-        JOIN users ON recipes.food_writer = users.id WHERE recipes.${searchBy} ILIKE '%${search}%'
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id
+         WHERE recipes.${searchBy} ILIKE '%${search}%'
         ORDER BY ID ${asc} OFFSET ${offset} LIMIT ${limit};`, (err, result)=>{
             if(!err){
                 return resolve(result)
@@ -30,8 +30,8 @@ const getRecipesSpec = async (data) => {
 const getRecipesCount = async (data) => {
     let {search, searchBy} = data
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT COUNT(*) FROM recipes JOIN category ON recipes.category_id=category.id
-        JOIN users ON recipes.food_writer = users.id WHERE recipes.${searchBy} ILIKE '%${search}%';`, (err, result)=>{
+        Pool.query(`SELECT COUNT(*) FROM recipes JOIN category ON recipes.category_id=category.id 
+        WHERE recipes.${searchBy} ILIKE '%${search}%';`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -43,8 +43,8 @@ const getRecipesCount = async (data) => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category, users.name AS author FROM recipes JOIN category ON recipes.category_id=category.id
-        JOIN users ON recipes.food_writer = users.id WHERE recipes.id='${id}';`, (err, result)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id 
+        WHERE recipes.id='${id}';`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -70,7 +70,7 @@ const inputRecipe = async (data) =>{
     let {id, title, ingredients, photo, category_id, food_writer} = data
 
     return new Promise((resolve, reject)=>{
-        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id, food_writer) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id}, ${food_writer})`, (err, result)=>{
+        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id})`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {

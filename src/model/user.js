@@ -1,22 +1,32 @@
 const Pool = require('../config/db')
 
-
-const createUser = async (data) =>{
-    let{id, name, email, password} = data
+const getAllUser = async (email) => {
     return new Promise((resolve, reject)=>{
-        Pool.query(`INSERT INTO users (id, name, email, password) VALUES (${id}, '${name}', '${email}', '${password}')`, (err, result)=>{
+        Pool.query(`SELECT * FROM users WHERE email='${email}'`, (err, result)=>{
             if(!err){
                 return resolve(result)
-            } else{
-                return reject(err)
+            }else {
+                reject(err)
             }
         })
     })
 }
-
-const getAllUser = async () => {
+const showUser = async () => {
     return new Promise((resolve, reject)=>{
         Pool.query(`SELECT * FROM users`, (err, result)=>{
+            if(!err){
+                return resolve(result)
+            }else {
+                reject(err)
+            }
+        })
+    })
+}
+const addUser = async (data) => {
+    let {uuid, email, password, username} = data
+    return new Promise((resolve, reject)=>{
+        Pool.query(`INSERT INTO users(uuid, email, password, username) VALUES ('${uuid}', '${email}',
+        '${password}', '${username}');`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -64,4 +74,4 @@ const updateUser = async (data) =>{
     })
 }
 
-module.exports = {createUser, getAllUser, deleteUser, updateUser, getUserById}
+module.exports = {getAllUser, showUser, addUser, deleteUser, updateUser, getUserById}
