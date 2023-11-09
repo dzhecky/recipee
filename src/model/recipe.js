@@ -55,7 +55,7 @@ const getRecipesCount = async (data) => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, recipes.users_id, recipes.category_id, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id 
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, recipes.users_id, recipes.category_id, category.name AS category, category.id AS category_id FROM recipes JOIN category ON recipes.category_id=category.id 
         WHERE recipes.id='${id}';`, (err, result)=>{
             if(!err){
                 return resolve(result)

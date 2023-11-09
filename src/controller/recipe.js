@@ -1,5 +1,6 @@
 const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount, getRecipesByUserId} = require('../model/recipe')
 const {getCategory} = require('../model/category')
+const cloudinary = require('../config/photo')
 
 const recipeController =  {
     getRecipes : async (req, res, next)=> {
@@ -98,9 +99,22 @@ const recipeController =  {
         res.status(200).json({message : 'succes get data by id from recipe', data})
     },
     inputRecipes : async (req, res, next)=> {
-        let {id, title, ingredients, photo, category_id} = req.body
+        let {id, title, ingredients, category_id} = req.body
         let {uuid} = req.payload
-        if(!id || !title || !ingredients || !photo || !category_id){
+
+        if(!req.file){
+            return res.status(404).json({message: 'photo must be jpg, png, jpeg or jfif'})
+        }
+        if(!req.isFileValid){
+            return res.status(404).json({message: isFileValidMessage})
+        }
+
+        const imageUpload = await cloudinary.uploader.upload(req.file.path,{folder: 'recipe'})
+        if(!imageUpload){
+            return res.status(404).json({message: 'failed to upload photo'})
+        }
+
+        if(!id || !title || !ingredients || !category_id){
             return res.status(404).json({message: 'failed input data, all is required'})
         }
 
@@ -116,7 +130,7 @@ const recipeController =  {
             return res.status(404).json({message: 'invalid there is no data'})
         }
 
-        let data = {id, title, ingredients, photo, category_id: parseInt(category_id),uuid}
+        let data = {id, title, ingredients, photo:imageUpload.secure_url, category_id: parseInt(category_id),uuid}
         let result = await inputRecipe(data)
         if(!result){
             return res.status(404).json({message: 'failed input data to recipe'})
@@ -126,7 +140,7 @@ const recipeController =  {
     updateRecipe : async (req, res, next) =>{
         let id = req.params.id
         let {uuid} = req.payload
-        let {title, ingredients, photo, category_id} = req.body
+        let {title, ingredients, category_id} = req.body
 
         let recipesData = await getRecipeById(id)
         if(recipesData.rows[0].users_id !== uuid){
@@ -136,35 +150,63 @@ const recipeController =  {
             return res.status(404).json({message: 'failed , data not found!'})
         }
 
-        let category = await getCategory()
-        let isCategory = false
-        category.rows.forEach((item)=>{
-            if(item.id == category_id){
-                isCategory = true
-            }
-        })
+        let data = recipesData.rows[0]
 
-        if(!isCategory){
-            return res.status(404).json({message: 'invalid there is no data'})
+        if(!category_id){
+            category_id = data.category_id
+        }else if(isNaN(parseInt(category_id))){
+            return res.status(404).json({message: 'category invalid'})
+        }else{
+            let category = await getCategory()
+            let isCategory = false
+            category.rows.forEach((item)=>{
+                if(item.id == category_id){
+                    isCategory = true
+                }
+            })
+            if(!isCategory){
+                return res.status(404).json({message: 'category not found'})
+            }
         }
 
-        let data = recipesData.rows[0]
         let newData = {
             id : data.id,
             title : title || data.title,
             ingredients : ingredients || data.ingredients,
-            photo : photo || data.photo,
-            category_id : parseInt(category_id) || data.category_id
+            category_id : parseInt(category_id) || data.category_id,
+        };
+
+        if(!req.file){
+            newData.photo =  data.photo
+            let result = await putRecipe(newData)
+            console.log(result);
+    
+            if(!result){
+                return res.status(404).json({message: 'failed update data'})
+            }
+    
+            return res.status(200).json({message : 'succes update data without photo'})
+        }
+        
+        if(req.file){
+            if(!req.isFileValid){
+                return res.status(404).json({message: 'photo must be jpg, png, jpeg or jfif'})
+            }
+            const imageUpload = await cloudinary.uploader.upload(req.file.path,{folder: 'recipe'})
+            if(!imageUpload){
+                return res.status(404).json({message: 'failed to upload photo'})
+            }
+            newData.photo = imageUpload.secure_url;
+            let result = await putRecipe(newData)
+            console.log(result);
+    
+            if(!result){
+                return res.status(404).json({message: 'failed update data'})
+            }
+    
+            res.status(200).json({message : 'succes update data with photo'})
         }
 
-        let result = await putRecipe(newData)
-        console.log(result);
-
-        if(!result){
-            return res.status(404).json({message: 'failed update data'})
-        }
-
-        res.status(200).json({message : 'succes update data'})
     },
     deleteRecepeId : async (req, res, next)=> {
         let {uuid} = req.payload
