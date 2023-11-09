@@ -45,7 +45,73 @@
 			"response": []
 		},
 		{
+			"name": "recipe User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{base_url}}/recipe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe By User Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{base_url}}/recipe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "recipe Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/recipe/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"recipe",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recipe Detail",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -95,6 +161,82 @@
 			"response": []
 		},
 		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "sayur",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/user/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "sayur",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/user/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "recipe",
 			"request": {
 				"method": "DELETE",
@@ -125,6 +267,16 @@
 		{
 			"name": "recipe",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMjkyN2M0YjYtMzliYy00YmE5LWJhNGItNjU3YmM4OGViNTBhIiwiZW1haWwiOiJtZW1iZXJAcmVjaXBlLmNvbSIsInVzZXJuYW1lIjoicmVjaXBlIG1lbWJlciIsImlhdCI6MTY5OTUyNjY1NX0.kQhEUZ17qNHXplkb-yWykOI26OOAbZEILel263eIizk",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -132,24 +284,41 @@
 					"urlencoded": [
 						{
 							"key": "title",
-							"value": "Pudding",
+							"value": "ayam Bakar",
 							"type": "text"
 						},
 						{
 							"key": "ingredients",
-							"value": "susu, air, krim(fla)",
+							"value": "Mentega, Ayam, Kecap",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"value": "https://picsum.photos/200",
+							"description": "https://picsum.photos/200",
+							"type": "text"
+						},
+						{
+							"key": "category_id",
+							"value": "1",
+							"description": "1 = main course | 2 = appetizer | 3 = dessert",
+							"type": "text"
+						},
+						{
+							"key": "food_writer",
+							"value": "3",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{base_url}}/recipe/2",
+					"raw": "{{base_url}}/recipe/1",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"recipe",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -208,112 +377,6 @@
 					],
 					"path": [
 						"recipe"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user id",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{base_url}}/recipe",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"recipe"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{base_url}}/recipe/5",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"recipe",
-						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{base_url}}/user?id=1&name=ali&email=ali123@gmail.com&password=12345",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"user"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						},
-						{
-							"key": "name",
-							"value": "ali"
-						},
-						{
-							"key": "email",
-							"value": "ali123@gmail.com"
-						},
-						{
-							"key": "password",
-							"value": "12345"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "{{base_url}}/user",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"user"
 					]
 				}
 			},

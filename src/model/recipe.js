@@ -12,6 +12,18 @@ const getAllRecipes = async () => {
         })
     })
 }
+const getRecipesByUserId = async (users_id) => {
+    return new Promise((resolve, reject)=>{
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id
+         WHERE users_id='${users_id}'`, (err, result)=>{
+            if(!err){
+                return resolve(result)
+            }else {
+                reject(err)
+            }
+        })
+    })
+}
 const getRecipesSpec = async (data) => {
     let {search, searchBy, offset, limit, asc} = data
     return new Promise((resolve, reject)=>{
@@ -43,7 +55,7 @@ const getRecipesCount = async (data) => {
 
 const getRecipeById = async (id) => {
     return new Promise((resolve, reject)=>{
-        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id 
+        Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, recipes.users_id, recipes.category_id, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id 
         WHERE recipes.id='${id}';`, (err, result)=>{
             if(!err){
                 return resolve(result)
@@ -67,10 +79,10 @@ const deleteRecipe = async (id) => {
 }
 
 const inputRecipe = async (data) =>{
-    let {id, title, ingredients, photo, category_id, food_writer} = data
+    let {id, title, ingredients, photo, category_id, uuid} = data
 
     return new Promise((resolve, reject)=>{
-        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id})`, (err, result)=>{
+        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id, users_id) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id}, '${uuid}')`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
@@ -94,4 +106,4 @@ const putRecipe = async (data) =>{
     })
 }
 
-module.exports = {getAllRecipes, getRecipesSpec, getRecipesCount, inputRecipe, putRecipe, getRecipeById, deleteRecipe}
+module.exports = {getAllRecipes, getRecipesByUserId, getRecipesSpec, getRecipesCount, inputRecipe, putRecipe, getRecipeById, deleteRecipe}

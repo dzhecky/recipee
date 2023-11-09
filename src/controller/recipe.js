@@ -1,4 +1,4 @@
-const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount} = require('../model/recipe')
+const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount, getRecipesByUserId} = require('../model/recipe')
 const {getCategory} = require('../model/category')
 
 const recipeController =  {
@@ -16,6 +16,38 @@ const recipeController =  {
         })
 
         res.status(200).json({message : 'succes get data from recipe', data})
+    },
+    getRecipesUser : async (req, res, next)=> {
+        let {uuid} = req.payload
+        let recipes = await getRecipesByUserId(uuid)
+        let data = recipes.rows
+        if(!data){
+            return res.status(404).json({message: 'failed to get data from recipe'})
+        }
+
+        data.forEach((item, index)=>{
+            let ingredients = item.ingredients.split(',')
+            data[index].ingredients = ingredients
+
+        })
+
+        res.status(200).json({message : `succes get recipes form users : ${req.payload.username}`, data})
+    },
+    getRecipesOtherById : async (req, res, next)=> {
+        let {id} = req.params
+        let recipes = await getRecipesByUserId(id)
+        let data = recipes.rows
+        if(!data){
+            return res.status(404).json({message: 'failed to get data from recipe'})
+        }
+
+        data.forEach((item, index)=>{
+            let ingredients = item.ingredients.split(',')
+            data[index].ingredients = ingredients
+
+        })
+
+        res.status(200).json({message : `succes get recipes form users : ${req.payload.username}`, data})
     },
     getRecipesDetail : async (req, res, next)=> {
 
@@ -67,6 +99,7 @@ const recipeController =  {
     },
     inputRecipes : async (req, res, next)=> {
         let {id, title, ingredients, photo, category_id} = req.body
+        let {uuid} = req.payload
         if(!id || !title || !ingredients || !photo || !category_id){
             return res.status(404).json({message: 'failed input data, all is required'})
         }
@@ -83,7 +116,7 @@ const recipeController =  {
             return res.status(404).json({message: 'invalid there is no data'})
         }
 
-        let data = {id, title, ingredients, photo, category_id: parseInt(category_id)}
+        let data = {id, title, ingredients, photo, category_id: parseInt(category_id),uuid}
         let result = await inputRecipe(data)
         if(!result){
             return res.status(404).json({message: 'failed input data to recipe'})
@@ -92,10 +125,14 @@ const recipeController =  {
     },
     updateRecipe : async (req, res, next) =>{
         let id = req.params.id
+        let {uuid} = req.payload
         let {title, ingredients, photo, category_id} = req.body
 
         let recipesData = await getRecipeById(id)
-        if(recipesData.rowCount == 0){
+        if(recipesData.rows[0].users_id !== uuid){
+            return res.status(404).json({message: 'failed , data cannot update by this user!'})
+        }
+        if(recipesData.rowCount == 0){ 
             return res.status(404).json({message: 'failed , data not found!'})
         }
 
@@ -130,7 +167,12 @@ const recipeController =  {
         res.status(200).json({message : 'succes update data'})
     },
     deleteRecepeId : async (req, res, next)=> {
+        let {uuid} = req.payload
         let id = req.params.id
+        let recipesData = await getRecipeById(id)
+        if(recipesData.rows[0].users_id !== uuid){
+            return res.status(404).json({message: 'failed , data cannot update by this user!'})
+        }
         let recipes = await deleteRecipe(id)
         if(recipes.rowCount == 0){
             return res.status(404).json({message: 'failed to delete recipe'})
