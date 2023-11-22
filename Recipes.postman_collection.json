@@ -50,6 +50,16 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZGRjMjZkMjktZDBkYS00ODcwLTlhMDItYWYwMzMyYTZmZDk4IiwiZW1haWwiOiJtZW1iZXIxQHJlY2lwZS5jb20iLCJ1c2VybmFtZSI6InJlY2lwZSBtZW1iZXIxIiwiaWF0IjoxNjk5NTk4NzU4fQ.GQ950Mvzw6bT1QNWe7fEWX-bA8RTkn4213sys8CY11Q",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -57,12 +67,13 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "{{base_url}}/recipe",
+					"raw": "{{base_url}}/recipe/myRecipe",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						"recipe"
+						"recipe",
+						"myRecipe"
 					]
 				}
 			},
