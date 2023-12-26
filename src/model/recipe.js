@@ -82,7 +82,7 @@ const inputRecipe = async (data) =>{
     let {id, title, ingredients, photo, category_id, uuid} = data
 
     return new Promise((resolve, reject)=>{
-        Pool.query(`INSERT INTO recipes (id, title, ingredients, photo, category_id, users_id) VALUES (${id}, '${title}', '${ingredients}', '${photo}', ${category_id}, '${uuid}')`, (err, result)=>{
+        Pool.query(`INSERT INTO recipes (title, ingredients, photo, category_id, users_id) VALUES ('${title}', '${ingredients}', '${photo}', ${category_id}, '${uuid}')`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {

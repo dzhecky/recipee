@@ -55,3 +55,5 @@ INSERT INTO users(id, name, email, password) VALUES (1, 'Reza', 'wawa@gmail.com'
 ALTER TABLE recipes ADD COLUMN users_id VARCHAR;
 
 UPDATE recipes SET users_id='1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed' WHERE photo='https://picsum.photos/200';
+
+ALTER TABLE recipes ALTER COLUMN id TYPE SERIAL

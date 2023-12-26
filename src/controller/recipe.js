@@ -99,7 +99,7 @@ const recipeController =  {
         res.status(200).json({message : 'succes get data by id from recipe', data})
     },
     inputRecipes : async (req, res, next)=> {
-        let {id, title, ingredients, category_id} = req.body
+        let {title, ingredients, category_id} = req.body
         let {uuid} = req.payload
 
         if(!req.file){
@@ -114,7 +114,7 @@ const recipeController =  {
             return res.status(404).json({message: 'failed to upload photo'})
         }
 
-        if(!id || !title || !ingredients || !category_id){
+        if(!title || !ingredients || !category_id){
             return res.status(404).json({message: 'failed input data, all is required'})
         }
 
