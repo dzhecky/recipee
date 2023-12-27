@@ -130,7 +130,7 @@ const recipeController =  {
             return res.status(404).json({message: 'invalid there is no data'})
         }
 
-        let data = {id, title, ingredients, photo:imageUpload.secure_url, category_id: parseInt(category_id),uuid}
+        let data = {title, ingredients, photo:imageUpload.secure_url, category_id: parseInt(category_id),uuid}
         let result = await inputRecipe(data)
         if(!result){
             return res.status(404).json({message: 'failed input data to recipe'})

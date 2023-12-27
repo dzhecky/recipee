@@ -24,7 +24,7 @@ ALTER TABLE recipes ADD COLUMN photo VARCHAR;
 
 ALTER TABLE recipes ADD COLUMN food_writer INT;
 
-ALTER TABLE recipes DROP COLUMN food_writer;
+ALTER TABLE recipes DROP COLUMN id;
 
 ALTER TABLE recipes ALTER COLUMN food_writer SET NOT NULL
 
@@ -52,8 +52,6 @@ INSERT INTO category(id, name) VALUES (2, 'Appetizer');
 INSERT INTO category(id, name) VALUES (3, 'Dessert');
 INSERT INTO users(id, name, email, password) VALUES (1, 'Reza', 'wawa@gmail.com', 'papapapa');
 
-ALTER TABLE recipes ADD COLUMN users_id VARCHAR;
+ALTER TABLE recipes ADD COLUMN id SERIAL PRIMARY KEY;
 
 UPDATE recipes SET users_id='1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed' WHERE photo='https://picsum.photos/200';
-
-ALTER TABLE recipes ALTER COLUMN id TYPE SERIAL
