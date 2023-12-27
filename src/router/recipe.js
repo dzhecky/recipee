@@ -4,7 +4,7 @@ const {protect} = require('../middleware/private')
 const upload = require('../middleware/upload')
 const router = express.Router()
 
-router.get('/', protect, getRecipes)
+router.get('/', getRecipes)
 router.get('/myRecipe', protect, getRecipesUser)
 router.get('/user/:id', protect, getRecipesOtherById)
 router.get('/detail', getRecipesDetail)
