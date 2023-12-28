@@ -1,4 +1,4 @@
-const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount, getRecipesByUserId} = require('../model/recipe')
+const {getAllRecipes, getRecipesSpec, inputRecipe, getRecipeById, putRecipe, deleteRecipe, getRecipesCount, getRecipesByUserId, getRecipesByCategory} = require('../model/recipe')
 const {getCategory} = require('../model/category')
 const cloudinary = require('../config/photo')
 
@@ -97,6 +97,22 @@ const recipeController =  {
             return res.status(404).json({message: 'failed to get data by id from recipe'})
         }
         res.status(200).json({message : 'succes get data by id from recipe', data})
+    },
+    getByCategory : async (req, res, next)=> {
+        let {id} = req.params
+        let recipes = await getRecipesByCategory(id)
+        let data = recipes.rows
+        if(!data){
+            return res.status(404).json({message: 'failed to get data from recipe'})
+        }
+
+        data.forEach((item, index)=>{
+            let ingredients = item.ingredients.split(',')
+            data[index].ingredients = ingredients
+
+        })
+
+        res.status(200).json({message : 'succes get data from recipe', data})
     },
     inputRecipes : async (req, res, next)=> {
         let {title, ingredients, category_id} = req.body

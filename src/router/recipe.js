@@ -1,10 +1,11 @@
 const express = require('express')
-const {getRecipes, inputRecipes, getById, updateRecipe, deleteRecepeId, getRecipesDetail, getRecipesUser, getRecipesOtherById} = require('../controller/recipe')
+const {getRecipes, inputRecipes, getById, updateRecipe, deleteRecepeId, getRecipesDetail, getRecipesUser, getRecipesOtherById, getByCategory} = require('../controller/recipe')
 const {protect} = require('../middleware/private')
 const upload = require('../middleware/upload')
 const router = express.Router()
 
 router.get('/', getRecipes)
+router.get('/category/:id', getByCategory)
 router.get('/myRecipe', protect, getRecipesUser)
 router.get('/user/:id', protect, getRecipesOtherById)
 router.get('/detail', getRecipesDetail)

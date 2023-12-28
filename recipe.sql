@@ -54,4 +54,6 @@ INSERT INTO users(id, name, email, password) VALUES (1, 'Reza', 'wawa@gmail.com'
 
 ALTER TABLE recipes ADD COLUMN id SERIAL PRIMARY KEY;
 
+ALTER TABLE users ADD COLUMN photo_profile VARCHAR
+
 UPDATE recipes SET users_id='1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed' WHERE photo='https://picsum.photos/200';
