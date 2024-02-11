@@ -5,7 +5,7 @@ const upload = require('../middleware/upload')
 const router = express.Router()
 
 router.get('/', getRecipes)
-router.get('/category/:id', getByCategory)
+router.get('/category', getByCategory)
 router.get('/myRecipe', protect, getRecipesUser)
 router.get('/user/:id', protect, getRecipesOtherById)
 router.get('/detail', getRecipesDetail)

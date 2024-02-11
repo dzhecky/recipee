@@ -24,10 +24,11 @@ const getRecipesByUserId = async (users_id) => {
         })
     })
 }
-const getRecipesByCategory = async (category_id) => {
+const getRecipesByCategory = async (data) => {
+    let {search, searchBy, offset, limit, asc} = data
     return new Promise((resolve, reject)=>{
         Pool.query(`SELECT recipes.id, recipes.title, recipes.ingredients, recipes.photo, category.name AS category FROM recipes JOIN category ON recipes.category_id=category.id
-        WHERE category_id='${category_id}'`, (err, result)=>{
+         WHERE recipes.${searchBy} ILIKE '%${search}%' ORDER BY ID ${asc} OFFSET ${offset} LIMIT ${limit}`, (err, result)=>{
             if(!err){
                 return resolve(result)
             }else {
